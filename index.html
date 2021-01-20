@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Race, Poverty and the COVID-19 burden in the United States by Ravi Kumar Podapati</title>
+    <script src="d3.min.js"></script>
+    <script src="d3.js"></script>
+    <script src="topojson.js"></script>
+    <script src="topojson.min.js"></script>
+    <script src= "d3-tip.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <h1><span>Race, Poverty and the COVID-19 burden in the United States</span></h1>
+    <h4><span>Ravi Kumar Podapati</span></h4>
+    <div class ="content">
+    <div class ="container_A"></div>
+    <div class ="container_B"></div>
+    <div class ="container_checkList1">
+      <form id="income_radio" onclick="radioMode_I()">
+      <lable for="opt1" class="radioI">
+        <input class= "hidden" type="radio" id="opt1" name="modeI" value="lt100" checked/>
+      <span  class="labelI"></span>Below 100% FPL
+      </lable>&nbsp;&nbsp;&nbsp;
+      <label for="opt2" class="radioI">
+        <input class= "hidden" id="opt2" type="radio" name="modeI" value="bt1_200" />
+        <span class="labelI"></span>100% - 200% FPL
+      </label>&nbsp;&nbsp;&nbsp;
+      <label for="opt3" class="radioI">
+        <input id="opt3" class="hidden" type="radio" name="modeI" value="gt200" />
+        <span class="labelI"></span>Above 200% FPL
+      </label>
+      <br>
+      <lable class="lab_P">* FPL= Federal Poverty Level. For more information visit the US Department of Health and Human Services</lable>
+    </form>
+    </div>
+    
+    <div class ="container_checkList2">
+      <form id="income_radio" onclick="radioMode_R()">
+        <lable for="opt4" class="radioR">
+          <input class= "hidden" type="radio" id="opt4" name="modeR" value="" />
+        <span  class="labelI"></span>Non-Hispanic White (%)
+        </lable>
+        &nbsp;&nbsp;
+        <label for="opt5" class="radioR">
+          <input class= "hidden" id="opt5" type="radio" name="modeR" value="" checked/>
+          <span class="labelI"></span>Non-Hispanic Black (%)
+        </label>&nbsp;&nbsp;
+        <label for="opt6" class="radioR">
+          <input id="opt6" class="hidden" type="radio" name="modeR" value="" />
+          <span class="labelI"></span>Hispanic (%)
+        </label>
+      </form>
+    </div>
+    <div class ="container_C">
+        <form id="covid_radio_I" onclick="radioCovid_I()">
+        <div class="radio-container">
+            <p class="radio-label--parent">COVID-19 Burden</p>
+            <div class="radio-options">
+              <input class="radio-input" id="covid_I" type="radio" name="Covid_19_I" value="" />
+              <label class="radio-label" for="covid_I">ON</label>
+              <input class="radio-input" id="covid_II" type="radio" name="Covid_19_I" value="" checked/>
+              <label class="radio-label" for="covid_II">OFF</label>
+            </div>
+          </div>
+        </form>
+        <br><br>
+        <div>
+        <label class="label" for="slider">Cases as of date:</label>
+        <input min=0 max=100 value=0 type="range" id="slider_I" class="slrange">
+        <label class="label_date" for="slider" id="date_I"></label>
+      </div>
+      </div>
+    <div class ="container_D">
+        <form id="covid_radio_R" onclick="radioCovid_R()">
+        <div class="radio-container">
+            <p class="radio-label--parent">COVID-19 Burden</p>
+            <div class="radio-options">
+              <input class="radio-input" id="covid_R" type="radio" name="Covid_19_R" value=""/>
+              <label class="radio-label" for="covid_R">ON</label>
+              <input class="radio-input" id="covid_RR" type="radio" name="Covid_19_R" value="" checked="checked"/>
+              <label class="radio-label" for="covid_RR">OFF</label>
+            </div>
+          </div>
+        </form>
+        <br><br>
+        <div>
+        <label class="label" for="slider">Cases as of date:</label>
+        <input min=0 max=100 value=0 type="range" id="slider_R" class="slrange">
+        <label class="label_date" for="slider" id="date_R"></label>
+      </div>
+      </div>
+
+    <div class ="container_E"></div>
+    
+    <div class ="container_F"></div>
+    
+    </div>
+    <script src="CodeFile.js"></script>
+</body>
+</html>
+
