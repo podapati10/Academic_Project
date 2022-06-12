@@ -84,7 +84,7 @@ Load_Graph()
 function Load_Graph()
 {
     Promise.all([d3.csv('https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv'), 
-    d3.csv('Poverty.csv'),d3.csv('Hispanic.csv'),d3.json('us.json')])
+    d3.csv('Data/Poverty.csv'),d3.csv('Data/Hispanic.csv'),d3.json('Data/us.json')])
     .then(([covid_dataset, income_dataset, race_dataset, Jdataset]) => { 
     covid_dataset.forEach(d => {covidbyid[d['countyFIPS']] = d;})
     income_dataset.forEach(d => {incomebyid[d.FIPS] = d;})
@@ -97,7 +97,7 @@ function Load_Graph()
     counties.forEach(d => { Object.assign(d.properties, covidbyid[+d.id]);});
     Load_svgA(income_dataset, counties, states)
     Load_svgB(race_dataset,counties, states)
- 
+ console.log(Covid_graph_data);
     })
 }
 
@@ -110,14 +110,37 @@ d3.select("#slider_R").on("input", render_casesR);
 ///////////////////////////////////////////////////////////////
 function render_casesI()
 {
-var date = new Date("Jan 21,2020");
+var date = new Date("2020, 03, 01");
 var slider_val =parseInt(d3.select("#slider_I").property("value"));
 dat =new Date(date.setDate(date.getDate()));
 dat2 =new Date(dat.setDate(date.getDate()+slider_val));
 var day = dat2.getDate();
 var month = dat2.getMonth()+1;
+console.log(month);
 var year = dat2.getYear();
-render_date = month +"/" +day+"/"+(year-100)
+if(10 > month)
+{ 
+    month = "0"+month;
+    console.log(month);
+}
+else
+{
+    month;
+}
+if(10 > dat2.getDate())
+{ 
+    var day = "0"+dat2.getDate();
+
+}
+else
+{
+    var day = dat2.getDate();
+}
+
+console.log(month);
+render_date = "20"+(year-100)+"-"+month+"-"+day
+console.log(render_date);
+// render_date = month +"/" +day+"/"+(year-100)
 svgA_g.selectAll(".country-circle").remove()
 document.getElementById('date_I').innerHTML =  render_date
 render_circles(render_date)
@@ -125,14 +148,33 @@ render_circles(render_date)
 
 function render_casesR()
 {
-var date = new Date("Jan 21,2020");
-var sliderR_val =parseInt(d3.select("#slider_R").property("value"));
-dat =new Date(date.setDate(date.getDate()));
-dat2 =new Date(dat.setDate(date.getDate()+sliderR_val));
-var day = dat2.getDate();
-var month = dat2.getMonth()+1;
-var year = dat2.getYear();
-render_date = month +"/" +day+"/"+(year-100)
+    var date = new Date("2020, 03, 01");
+    var slider_val =parseInt(d3.select("#slider_R").property("value"));
+    dat =new Date(date.setDate(date.getDate()));
+    dat2 =new Date(dat.setDate(date.getDate()+slider_val));
+    var day = dat2.getDate();
+    var month = dat2.getMonth()+1;
+    var year = dat2.getYear();
+    if(10 > month)
+    { 
+        month = "0"+month;
+    }
+    else
+    {
+        month;
+    }
+    if(10 > dat2.getDate())
+    { 
+        var day = "0"+dat2.getDate();
+    
+    }
+    else
+    {
+        var day = dat2.getDate();
+    }
+    render_date = "20"+(year-100)+"-"+month+"-"+day
+    console.log(render_date);
+// render_date = month +"/" +day+"/"+(year-100)
 svgB_g.selectAll(".country-circle").remove()
 document.getElementById('date_R').innerHTML =render_date
 render_circles(render_date)
@@ -149,26 +191,28 @@ if(modeR[0].checked)
 {
     if(current_Date == 1 && FalgR==1)
         {
-
+console.log(current_Date)
             var date_now = new Date();
-            var dy = date_now.getDate()-2;
+            var dy = date_now.getDate()-1;
             var mnth = date_now.getMonth()+1;
             var yr = date_now.getYear();
             var vari = mnth +"/" +dy+"/"+(yr-100)
-            current_Date = vari;
+            // current_Date = vari;
+            current_Date = "2021-08-16";
             document.getElementById('date_R').innerHTML = current_Date
         }
         
         counties.forEach(d => {
             d.properties.projected = projection(d3.geoCentroid(d));
         });
-    
+    console.log(counties);
         featuresWithCases = counties
         .filter(d => d.properties[current_Date])
         .map(d => {
           d.properties[current_Date] = +d.properties[current_Date];
           return d;
         });
+        console.log(featuresWithCases);
         radiusValue= d => d.properties[current_Date]
         current_cases =radiusValue;
         radiusScale.domain([0, d3.max(counties, radiusValue)])
@@ -207,17 +251,19 @@ else if(modeR[1].checked){
 
 if(modeI[0].checked)
     {
+        
     if(current_Date == 1 && FalgI==1)
         {
             var date_now = new Date();
-            var dy = date_now.getDate()-2;
+            var dy = date_now.getDate()-1;
             var mnth = date_now.getMonth()+1;
             var yr = date_now.getYear();
             var vari = mnth +"/" +dy+"/"+(yr-100)
-            current_Date = vari;
+            current_Date = "2021-08-16";
+            console.log(current_Date);
             document.getElementById('date_I').innerHTML = current_Date
         }
-        console.log(counties);
+        
         counties.forEach(d => {
             d.properties.projected = projection(d3.geoCentroid(d));
         });
@@ -228,7 +274,6 @@ if(modeI[0].checked)
           d.properties[current_Date] = +d.properties[current_Date];
           return d;
         });
-        console.log(featuresWithCases);
         radiusValue= d => d.properties[current_Date]
         current_cases =radiusValue;
         radiusScale.domain([0, d3.max(counties, radiusValue)])
@@ -278,13 +323,35 @@ function Generate_CovidGraph_R(R_name, dataid,graph_date)
         if(Covid_graph_data[i].countyFIPS== dataid)
             {            
         do{
-            date_c = new Date("Jan 22,2020");
-            d = new Date(date_c.setDate(date_c.getDate()));
-            dd = new Date(d.setDate(date_c.getDate()+count));
-            d = dd.getDate();
-            m = dd.getMonth()+1;
-            y = dd.getYear();
-            check_date = m+"/" + d +"/"+(y-100)
+            var date = new Date("2020, 01, 22");
+        dat =new Date(date.setDate(date.getDate()+count));
+        var day = dat.getDate();
+        var month = dat.getMonth()+1;
+        var year = dat.getYear()-100;
+        if(10 > month)
+        { 
+            month = "0"+month;
+        }
+        else
+        {
+            month;
+        }
+        if(10 > dat.getDate())
+        { 
+            var day = "0"+dat.getDate();
+        }
+        else
+        {
+            var day = dat.getDate();
+        }      
+        check_date = "20"+(year)+"-"+month+"-"+day 
+            // date_c = new Date("2020, 03, 01");
+            // d = new Date(date_c.setDate(date_c.getDate()));
+            // dd = new Date(d.setDate(date_c.getDate()+count));
+            // d = dd.getDate();
+            // m = dd.getMonth()+1;
+            // y = dd.getYear();
+            // check_date = m+"/" + d +"/"+(y-100)
             data_id ={id: Covid_graph_data[i].countyFIPS, cases : Covid_graph_data[i][check_date], date :check_date}
             vl =Covid_graph_data[i][graph_date]
             databyid.push(data_id)
@@ -303,18 +370,43 @@ function Generate_CovidGraph_R(R_name, dataid,graph_date)
 function Generate_CovidGraph_I(dataid,graph_date, C_name)
 {
 var databyid=[], data_id ={}, count=0, d, m, y, check_date, date_c, vl;
+
 for(let i=0; i<Covid_graph_data.length; i++)
 {
+   
     if(Covid_graph_data[i].countyFIPS== dataid)
-        {            
+        {    
     do{
-        date_c = new Date("Jan 22,2020");
-        d = new Date(date_c.setDate(date_c.getDate()));
-        dd = new Date(d.setDate(date_c.getDate()+count));
-        d = dd.getDate();
-        m = dd.getMonth()+1;
-        y = dd.getYear();
-        check_date = m+"/" + d +"/"+(y-100)
+    var date = new Date("2020, 01, 22");
+        dat =new Date(date.setDate(date.getDate()+count));
+        var day = dat.getDate();
+        var month = dat.getMonth()+1;
+        var year = dat.getYear()-100;
+        if(10 > month)
+        { 
+            month = "0"+month;
+        }
+        else
+        {
+            month;
+        }
+        if(10 > dat.getDate())
+        { 
+            var day = "0"+dat.getDate();
+        }
+        else
+        {
+            var day = dat.getDate();
+        }      
+        check_date = "20"+(year)+"-"+month+"-"+day 
+
+    //     // date_c = new Date("2020, 03, 01");
+    //     // d = new Date(date_c.setDate(date_c.getDate()));
+    //     // dd = new Date(d.setDate(date_c.getDate()+count));
+    //     // d = dd.getDate();
+    //     // m = dd.getMonth()+1;
+    //     // y = dd.getYear();
+    //     // check_date = m+"/" + d +"/"+(y-100)
         data_id ={id: Covid_graph_data[i].countyFIPS, cases : Covid_graph_data[i][check_date], date :check_date, County : Covid_graph_data[i].CountyName}
         vl =Covid_graph_data[i][graph_date]
         databyid.push(data_id)
@@ -324,28 +416,47 @@ for(let i=0; i<Covid_graph_data.length; i++)
             break;
         }
     } while(vl == Covid_graph_data[i][graph_date])
-    }
+        }
 }
 lineGraph_I(databyid, C_name)
 }
 /////////////////////////////////////////////////////////////////////
 function lineGraph_I(data,C_name)
 {
+console.log(data);
 covidSvgA_g.selectAll(".line_I").remove()
 covidSvgA_g.selectAll(".C_titleI").remove()
-var parseTime = d3.timeParse("%m/%d/%y")
+var parseTime = d3.timeFormat("%m/%d/%y")
 var yAxisLable='Cases', xAxisLabel = 'Timeline', title='Cumulative incidence'
+
+// -----------------------
+// var x = d3.scaleTime()
+// .range([0, D_width ])
+// .domain(d3.extent(databyid, function(d) {dt = new Date(d.date);
+//     return dt;})); 
+
+// var y1 = d3.scaleLinear()
+// .domain([0, d3.max(databyid, function(d){ return parseInt(d.cases)})]).nice().range([ D_height, 0 ]);
+
+// var line_fun = d3.line()
+// .x(function(d){dt = new Date(d.date); return x(dt);})
+// .y(function(d){return y1(parseInt(d.cases))})
+
+// -----------------------
+
+
 
 var XScale = d3.scaleTime()
 .range([0,width-40])
-.domain(d3.extent(data, function(d){ return parseTime(d.date);})); 
+.domain(d3.extent(data, function(d){ dt = new Date(d.date);
+    return dt;})); 
 
 var YScale = d3.scaleLinear()
 .domain([0, d3.max(data, function(d){ return parseInt(d.cases)})]).nice()
 .range([height, 40])
 
 var line_fun = d3.line()
-.x(function(d){return XScale(parseTime(d.date));})
+.x(function(d){dt = new Date(d.date); return XScale(dt);})
 .y(function(d){return YScale(parseInt(d.cases))})
 
 var xAxis = d3.axisBottom(XScale)//.tickSize(-height).tickPadding(15).ticks(8);
@@ -379,15 +490,28 @@ var yAxisLable='Cases', xAxisLabel = 'Timeline', title='Cumulative incidence'
 
 var XScale = d3.scaleTime()
 .range([0,width-40])
-.domain(d3.extent(data, function(d){ return parseTime(d.date);})); 
+.domain(d3.extent(data, function(d){ dt = new Date(d.date);
+    return dt;})); 
 
 var YScale = d3.scaleLinear()
 .domain([0, d3.max(data, function(d){ return parseInt(d.cases)})]).nice()
 .range([height, 40])
 
 var line_fun = d3.line()
-.x(function(d){return XScale(parseTime(d.date));})
+.x(function(d){dt = new Date(d.date); return XScale(dt);})
 .y(function(d){return YScale(parseInt(d.cases))})
+
+// var XScale = d3.scaleTime()
+// .range([0,width-40])
+// .domain(d3.extent(data, function(d){ return parseTime(d.date);})); 
+
+// var YScale = d3.scaleLinear()
+// .domain([0, d3.max(data, function(d){ return parseInt(d.cases)})]).nice()
+// .range([height, 40])
+
+// var line_fun = d3.line()
+// .x(function(d){return XScale(parseTime(d.date));})
+// .y(function(d){return YScale(parseInt(d.cases))})
 
 var xAxis = d3.axisBottom(XScale)//.tickSize(-height).tickPadding(15).ticks(8);
 var yAxis = d3.axisLeft(YScale)//.tickSize(-width).tickPadding(10).ticks(8);
