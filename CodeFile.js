@@ -84,7 +84,7 @@ Load_Graph()
 function Load_Graph()
 {
     Promise.all([d3.csv('https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv'), 
-    d3.csv('Data/Poverty.csv'),d3.csv('Data/Hispanic.csv'),d3.json('Data/us.json')])
+    d3.csv('Poverty.csv'),d3.csv('Hispanic.csv'),d3.json('us.json')])
     .then(([covid_dataset, income_dataset, race_dataset, Jdataset]) => { 
     covid_dataset.forEach(d => {covidbyid[d['countyFIPS']] = d;})
     income_dataset.forEach(d => {incomebyid[d.FIPS] = d;})
