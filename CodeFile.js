@@ -1,13 +1,3 @@
-///// Dr. Kumar and J, thank you for great mentoring and guidance                                          
-//// To complete this project, I have gone through several tutorials.
-//// There would be tons of names to mention but it was hard to keep track of all                           
-//// Few to definitely mention: Mr. Matt Dionis, 
-//// Mr. Bill Morris’s(tutorial of Choropleth Map-https://bl.ocks.org/wboykinm/dbbe50d1023f90d4e241712395c27fb3),
-/// Mr. Curran Kelleher(Using Geojson and Topojson files-https://www.youtube.com/watch?v=c0a02WHjgEs).
-/// Websites used- Observablehq.com, Github.com, Google and Youtube.
-/// Used CENSUS data from data.census.gov and COVID-19 from USAFACTS.org
-
-
 var margin = { top: 10, right: 10, bottom: 10, left: 10 },
     width = 710 - margin.left - margin.right,
     height = 350 - margin.top - margin.bottom;
@@ -837,3 +827,4 @@ function radioCovid_R()
     current_Date=1;
     render_circles(current_Date)
 }
+
